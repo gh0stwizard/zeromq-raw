@@ -5,6 +5,7 @@
 #include "ppport.h"
 #include <xs_object_magic.h>
 #include <zmq.h>
+#include <zmq_utils.h>
 #include "zmqxs.h"
 
 MODULE = ZeroMQ::Raw	PACKAGE = ZeroMQ::Raw   PREFIX = zmq_
@@ -159,10 +160,11 @@ zmq_sock_err
 zmq_connect(zmq_sock_t *sock, const char *endpoint)
 
 zmq_sock_err
-zmq_send(zmq_sock_t *sock, zmq_msg_t *msg, int flags)
+zmq_sendmsg(zmq_sock_t *sock, zmq_msg_t *msg, int flags)
 
 zmq_sock_err
-zmq_recv(zmq_sock_t *sock, zmq_msg_t *msg, int flags)
+zmq_recvmsg(zmq_sock_t *sock, zmq_msg_t *msg, int flags)
+
 
 zmq_sock_err
 zmq_setsockopt(zmq_sock_t *sock, int option, SV *value)
@@ -188,16 +190,14 @@ zmq_setsockopt(zmq_sock_t *sock, int option, SV *value)
                 RETVAL = zmq_setsockopt(sock, option, ptr, len);
                 break;
 
-            case ZMQ_SWAP:
             case ZMQ_RATE:
             case ZMQ_RECOVERY_IVL:
-            case ZMQ_RECOVERY_IVL_MSEC:
-            case ZMQ_MCAST_LOOP:
                 i64 = SvIV(value);
                 RETVAL = zmq_setsockopt(sock, option, &i64, sizeof(int64_t));
                 break;
 
-            case ZMQ_HWM:
+            case ZMQ_SNDHWM:
+            case ZMQ_RCVHWM:
             case ZMQ_AFFINITY:
             case ZMQ_SNDBUF:
             case ZMQ_RCVBUF:
@@ -237,17 +237,16 @@ zmq_getsockopt(zmq_sock_t *sock, int option)
                 break;
 
             case ZMQ_RCVMORE:
-            case ZMQ_SWAP:
             case ZMQ_RATE:
             case ZMQ_RECOVERY_IVL:
-            case ZMQ_MCAST_LOOP:
                 len = sizeof(i64);
                 status = zmq_getsockopt(sock, option, &i64, &len);
                 if(status == 0)
                     RETVAL = newSViv(i64);
                 break;
 
-            case ZMQ_HWM:
+            case ZMQ_SNDHWM:
+            case ZMQ_RCVHWM:
             case ZMQ_AFFINITY:
             case ZMQ_SNDBUF:
             case ZMQ_RCVBUF:

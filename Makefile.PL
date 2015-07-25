@@ -18,8 +18,10 @@ my @argv = @ARGV;
 
 my %args;
 for my $arg (@argv){
-    if($arg =~ /^([A-Z]+)=(.+)$/ && $1 eq 'LIBS' || $1 eq 'INC'){
-        $args{$1} = $2;
+    $arg =~ /^([A-Z]+)=(.+)$/ or next;
+
+    if ( $1  eq 'LIBS' || $1 eq 'INC') {
+        $args{ $1 } = $2;
     }
     else {
         push @ARGV, $arg;

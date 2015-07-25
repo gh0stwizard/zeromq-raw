@@ -16,7 +16,7 @@ my $i = 0;
 while(1){
     my $str = "debug: message $i";
     my $m = ZeroMQ::Raw::Message->new_from_scalar($str);
-    $s->send($m, 0);
+    $s->sendmsg($m, 0);
     say $str;
     $i++;
     sleep 1;

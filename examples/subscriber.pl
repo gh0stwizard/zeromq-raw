@@ -15,6 +15,6 @@ $s->setsockopt(ZMQ_SUBSCRIBE, 'debug:');
 
 do {
     my $m = ZeroMQ::Raw::Message->new;
-    $s->recv($m, 0);
+    $s->recvmsg($m, 0);
     say $m->data;
 } while (1);

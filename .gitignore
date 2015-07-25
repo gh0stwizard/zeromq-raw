@@ -6,10 +6,12 @@
 /RawZMQ.c
 /RawZMQ.o
 /Raw.bs
-/ppport.h
 /Makefile
 /META.yml
-/MANIFEST
-/MANIFEST.SKIP
-/Makefile.old
+/Makefile*
 /zmqxs.o
+/MYMETA.json
+/MYMETA.yml
+/Makefile.aperl
+/perl
+/perlmain.*

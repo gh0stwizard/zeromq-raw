@@ -4,7 +4,7 @@ use Test::More;
 use Test::Exception;
 
 use ZeroMQ::Raw;
-use ZeroMQ::Raw::Constants qw(ZMQ_PUB ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_NOBLOCK);
+use ZeroMQ::Raw::Constants qw(ZMQ_PUB ZMQ_SUB ZMQ_SUBSCRIBE ZMQ_DONTWAIT);
 
 my $c = ZeroMQ::Raw::Context->new(threads => 0);
 ok $c, 'got context';
@@ -37,13 +37,14 @@ lives_ok {
 
 my $to_send = ZeroMQ::Raw::Message->new_from_scalar('LOL.CATS are awesome');
 
+
 lives_ok {
-    $pub->send($to_send, ZMQ_NOBLOCK);
+    $pub->sendmsg($to_send, ZMQ_DONTWAIT);
 } 'sent ok';
 
 my $to_recv = ZeroMQ::Raw::Message->new;
 lives_ok {
-    $sub->recv($to_recv, ZMQ_NOBLOCK);
+    $sub->recvmsg($to_recv, ZMQ_DONTWAIT);
 } 'recv without error';
 
 is $to_recv->data, 'LOL.CATS are awesome', 'got expected data';
